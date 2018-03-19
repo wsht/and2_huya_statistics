@@ -50,7 +50,7 @@ class DataHelper
 
 	public function isMessageExist($id)
 	{
-		return Capsule::table("danmu_message")->where(["id"=>"$id"])->exists();
+		return Capsule::table("danmu_message")->where(["id"=>"'$id'"])->exists();
 	}
 
 	public function addUser($rid, $name)
