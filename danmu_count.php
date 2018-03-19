@@ -41,21 +41,21 @@ class DataHelper
 		$sendTime = $this->getFormatDate("Y-m-d H:i:s", $sendTime);
 
 		return Capsule::table("danmu_message")->insert([
-			"id" => $id,
-			"content" =>$content,
+			"id"       => $id,
+			"content"  => $content,
 			"sendTime" => $sendTime,
-			"rid" => $rid
+			"rid"      => $rid
 		]);
 	}
 
 	public function isMessageExist($id)
 	{
-		return Capsule::table("danmu_message")->where(["id"=>"$id"])->exists();
+		return Capsule::table("danmu_message")->where(["id" => "$id"])->exists();
 	}
 
 	public function addUser($rid, $name)
 	{
-		return Capsule::table("danmu_user")->updateOrInsert(['rid' => $rid, 'name' => $name], ['name'=>$name]);
+		return Capsule::table("danmu_user")->updateOrInsert(['rid' => $rid, 'name' => $name], ['name' => $name]);
 	}
 
 	public function addTotalTimer($rid)
@@ -81,7 +81,7 @@ class DataHelper
 		return $this->incrementCountTimer("danmu_count_hours", $rid, $date);
 	}
 
-	public function countDayFromDatabases($rid, $date)
+	public function addDayTimer($rid, $date)
 	{
 		$date = $this->getFormatDate("Y-m-d", $date) . " 00:00:00";
 
@@ -98,7 +98,7 @@ class DataHelper
 			return $builder->where($attr)->increment("timer");
 		}
 
-		return $builder->insert(array_merge($attr, ['timer'=>1]));
+		return $builder->insert(array_merge($attr, ['timer' => 1]));
 	}
 
 
@@ -119,11 +119,17 @@ foreach ($fileList as $file) {
 	while ($buffer = fgets($handle, 4096)) {
 		$buffer = json_decode($buffer);
 		if ($buffer->type === 'chat') {
-			if (!$dataHelper->isMessageExist($buffer->id)) {
-				$dataHelper->addMessage($buffer->id, $buffer->content, $buffer->time, $buffer->from->rid);
-				$dataHelper->addUser($buffer->from->rid, $buffer->from->name);
-				$dataHelper->addTotalTimer($buffer->from->rid);
-			}
+			
+			Capsule::connection()->transaction(function () use ($dataHelper, $buffer) {
+				if (!$dataHelper->isMessageExist($buffer->id)) {
+					$dataHelper->addMessage($buffer->id, $buffer->content, $buffer->time, $buffer->from->rid);
+					$dataHelper->addUser($buffer->from->rid, $buffer->from->name);
+					$dataHelper->addTotalTimer($buffer->from->rid);
+					$dataHelper->add5MinutesTimer($buffer->from->rid, $buffer->time);
+					$dataHelper->addHourTimer($buffer->from->rid, $buffer->time);
+					$dataHelper->addDayTimer($buffer->from->rid, $buffer->time);
+				}
+			});
 		}
 	}
 	fclose($handle);
