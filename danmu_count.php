@@ -121,8 +121,8 @@ foreach ($fileList as $file) {
 		if ($buffer->type === 'chat') {
 			if (!$dataHelper->isMessageExist($buffer->id)) {
 				$dataHelper->addMessage($buffer->id, $buffer->content, $buffer->time, $buffer->from->rid);
-				$dataHelper->addUser($buffer->rid, $buffer->name);
-				$dataHelper->addTotalTimer($buffer->rid);
+				$dataHelper->addUser($buffer->from->rid, $buffer->from->name);
+				$dataHelper->addTotalTimer($buffer->from->rid);
 			}
 		}
 	}
