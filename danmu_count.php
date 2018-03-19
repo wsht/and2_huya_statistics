@@ -55,7 +55,7 @@ class DataHelper
 
 	public function addUser($rid, $name)
 	{
-		return Capsule::table("danmu_user")->updateOrInsert(['rid' => $rid, 'name' => $name]);
+		return Capsule::table("danmu_user")->updateOrInsert(['rid' => $rid, 'name' => $name], ['name'=>$name]);
 	}
 
 	public function addTotalTimer($rid)
