@@ -6,6 +6,7 @@
  * Time: 上午8:46
  */
 require "vendor/autoload.php";
+
 use Illuminate\Database\Capsule\Manager as Capsule;
 
 
@@ -14,7 +15,7 @@ $capsule = new Capsule;
 $capsule->addConnection([
 	'driver'    => 'mysql',
 	'host'      => "localhost",
-	'database' => 'huya_danmu',
+	'database'  => 'huya_danmu',
 	'username'  => 'root',
 	'password'  => 'root',
 	'charset'   => 'latin1',
@@ -37,7 +38,14 @@ class DataHelper
 {
 	public function addMessage($id, $content, $sendTime, $rid)
 	{
+		$sendTime = $this->getFormatDate("Y-m-d H:i:s", $sendTime);
 
+		return Capsule::table("danmu_message")->insert([
+			"id" => $id,
+			"content" =>$content,
+			"sendTime" => $sendTime,
+			"rid" => $rid
+		]);
 	}
 
 	public function isMessageExist($id)
@@ -52,21 +60,31 @@ class DataHelper
 
 	public function addTotalTimer($rid)
 	{
-
+		return $this->incrementCountTimer("danmu_count_total", $rid);
 	}
 
 	public function add5MinutesTimer($rid, $date)
 	{
+		$calDate = (int)( $date / 1000 );
+		$curMinutes = date("i", $calDate);
+		$minutes = intval($curMinutes / 5) * 5;
+
+		$date = $this->getFormatDate("Y-m-d H", $date) . ":" . str_pad($minutes, 2, "0", STR_PAD_LEFT) . ":00";
+
 		return $this->incrementCountTimer("danmu_count_minutes_5", $rid, $date);
 	}
 
 	public function addHourTimer($rid, $date)
 	{
+		$date = $this->getFormatDate("Y-m-d H", $date) . ":00:00";
+
 		return $this->incrementCountTimer("danmu_count_hours", $rid, $date);
 	}
 
 	public function countDayFromDatabases($rid, $date)
 	{
+		$date = $this->getFormatDate("Y-m-d", $date) . " 00:00:00";
+
 		return $this->incrementCountTimer("danmu_count_day", $rid, $date);
 	}
 
@@ -83,6 +101,15 @@ class DataHelper
 		return $builder->insert(array_merge($attr, ['timer']));
 	}
 
+
+	private function getFormatDate($format, $date)
+	{
+		$date = (int)( $date / 1000 );
+
+		$date = date($format, $date);
+
+		return $date;
+	}
 }
 
 $dataHelper = new DataHelper();
