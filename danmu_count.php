@@ -67,10 +67,10 @@ class DataHelper
 
 	public function countDayFromDatabases($rid, $date)
 	{
-		return $this->incrementCountTimer("danmu_count_day", $rid, $date, );
+		return $this->incrementCountTimer("danmu_count_day", $rid, $date);
 	}
 
-	private function incrementCountTimer($table, $rid, $date)
+	private function incrementCountTimer($table, $rid, $date = null)
 	{
 		$builder = Capsule::table("$table");
 
@@ -80,7 +80,7 @@ class DataHelper
 			return $builder->where($attr)->increment("timer");
 		}
 
-		return $builder->insert(array_merge($attr,['timer']));
+		return $builder->insert(array_merge($attr, ['timer']));
 	}
 
 }
