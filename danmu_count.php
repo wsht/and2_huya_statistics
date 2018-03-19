@@ -5,7 +5,7 @@
  * Date: 18/3/19
  * Time: 上午8:46
  */
-
+require "vendor/autoload.php";
 use Illuminate\Database\Capsule\Manager as Capsule;
 
 
