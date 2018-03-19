@@ -14,7 +14,7 @@ $capsule = new Capsule;
 $capsule->addConnection([
 	'driver'    => 'mysql',
 	'host'      => "localhost",
-	'databases' => 'huya_danmu',
+	'database' => 'huya_danmu',
 	'username'  => 'root',
 	'password'  => 'root',
 	'charset'   => 'latin1',
