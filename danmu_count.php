@@ -55,7 +55,13 @@ class DataHelper
 
 	public function addUser($rid, $name)
 	{
-		return Capsule::table("danmu_user")->updateOrInsert(['rid' => $rid, 'name' => $name], ['name' => $name]);
+		$builder = Capsule::table("danmu_user");
+
+		if(!$builder->where(["rid"=>$rid])->exists()){
+			return $builder->insert(['rid' => $rid, 'name' => $name]);
+		}
+
+		return true;
 	}
 
 	public function addTotalTimer($rid)
@@ -119,17 +125,24 @@ foreach ($fileList as $file) {
 	while ($buffer = fgets($handle, 4096)) {
 		$buffer = json_decode($buffer);
 		if ($buffer->type === 'chat') {
-			
-			Capsule::connection()->transaction(function () use ($dataHelper, $buffer) {
-				if (!$dataHelper->isMessageExist($buffer->id)) {
-					$dataHelper->addMessage($buffer->id, $buffer->content, $buffer->time, $buffer->from->rid);
-					$dataHelper->addUser($buffer->from->rid, $buffer->from->name);
-					$dataHelper->addTotalTimer($buffer->from->rid);
-					$dataHelper->add5MinutesTimer($buffer->from->rid, $buffer->time);
-					$dataHelper->addHourTimer($buffer->from->rid, $buffer->time);
-					$dataHelper->addDayTimer($buffer->from->rid, $buffer->time);
-				}
-			});
+			try {
+
+				Capsule::connection()->transaction(function () use ($dataHelper, $buffer) {
+					if (!$dataHelper->isMessageExist($buffer->id)) {
+						$dataHelper->addMessage($buffer->id, $buffer->content, $buffer->time, $buffer->from->rid);
+						$dataHelper->addUser($buffer->from->rid, $buffer->from->name);
+						$dataHelper->addTotalTimer($buffer->from->rid);
+						$dataHelper->add5MinutesTimer($buffer->from->rid, $buffer->time);
+						$dataHelper->addHourTimer($buffer->from->rid, $buffer->time);
+						$dataHelper->addDayTimer($buffer->from->rid, $buffer->time);
+					}
+				});
+			}catch (\Exception $exception){
+				var_dump($exception->getMessage());
+				var_dump($exception->getLine());
+				file_put_contents("danmu_count_error.log", json_encode($buffer), FILE_APPEND);
+			}
+
 		}
 	}
 	fclose($handle);
