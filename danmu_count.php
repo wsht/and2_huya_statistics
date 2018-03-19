@@ -98,7 +98,7 @@ class DataHelper
 			return $builder->where($attr)->increment("timer");
 		}
 
-		return $builder->insert(array_merge($attr, ['timer']));
+		return $builder->insert(array_merge($attr, ['timer'=>1]));
 	}
 
 
