@@ -16,7 +16,7 @@ $capsule->addConnection([
 	'host'      => "localhost",
 	'databases' => 'huya_danmu',
 	'username'  => 'root',
-	'password'  => 'password',
+	'password'  => 'root',
 	'charset'   => 'latin1',
 	'collation' => 'latin1_swedish_ci',
 	'prefix'    => '',
