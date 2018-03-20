@@ -3,14 +3,19 @@
  */
 
 const huya_danmu = require('huya-danmu')
-const roomid = '2058731947'
+const roomid = 'live/11823664'//'kaerlol'; //'2058731947'
 const client = new huya_danmu(roomid)
 const fs = require("fs");
 
-const msgLogName = () => {
+const log_dir = '/data/huya_log/v1';
+const message_log  = log_dir + "/message/";
+const online_log = log_dir + "/online/";
+const gift_log = log_dir + "/gift/"
+
+const msgLogName = (pre) => {
   let date = new Date();
 
-  return `./message.${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}.log`
+  return `${pre}${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}.log`
 }
 
 client.on('connect', () => {
@@ -18,11 +23,35 @@ client.on('connect', () => {
 
 })
 
+
+
 client.on('message', msg => {
   fs.appendFile(msgLogName(), JSON.stringify(msg) + "\n", (err) => {
     if (err)
       console.log(err);
   });
+  switch (msg.type){
+    case "chat":
+      fs.appendFile(msgLogName(message_log), JSON.stringify(msg) + "\n", (err) => {
+        if (err)
+          console.log(err);
+      });
+      break;
+    case "gift":
+      fs.appendFile(msgLogName(gift_log), JSON.stringify(msg) + "\n", (err) => {
+        if (err)
+          console.log(err);
+      });
+      break;
+    case "online":
+      fs.appendFile(msgLogName(online_log), JSON.stringify(msg) + "\n", (err) => {
+        if (err)
+          console.log(err);
+      });
+    default:
+      break;
+  }
+
   // switch (msg.type) {
   //   case 'chat':
   //     console.log(`${msg.id}`);

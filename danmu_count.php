@@ -57,7 +57,7 @@ class DataHelper
 	{
 		$builder = Capsule::table("danmu_user");
 
-		if(!$builder->where(["rid"=>$rid])->exists()){
+		if (!$builder->where(["rid" => $rid])->exists()) {
 			return $builder->insert(['rid' => $rid, 'name' => $name]);
 		}
 
@@ -137,7 +137,7 @@ foreach ($fileList as $file) {
 						$dataHelper->addDayTimer($buffer->from->rid, $buffer->time);
 					}
 				});
-			}catch (\Exception $exception){
+			} catch (\Exception $exception) {
 				var_dump($exception->getMessage());
 				var_dump($exception->getLine());
 				file_put_contents("danmu_count_error.log", json_encode($buffer), FILE_APPEND);
