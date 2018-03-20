@@ -60,7 +60,7 @@ foreach ($fileList as $file) {
 
 $cmd = "ps -aux | grep node | grep -v grep | awk '{print $2}' | xargs kill ";
 
-//var_dump(`$cmd`);
+var_dump(`$cmd`);
 
-$startNode = "(node " . $targetDir . "danmu.js xxm 2058731947 >> " . TargetDirDefine::ROOT_DIR . "error.log &)";
-var_dump($startNode);
+$startNode = "(node " . $targetDir . "danmu.js xxm 2058731947 >> " . TargetDirDefine::ROOT_DIR . "/error.log &)";
+`$startNode`;
