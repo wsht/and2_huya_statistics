@@ -13,6 +13,6 @@ $fileListCmd = "ls $targetDir | egrep 'message.*.log'";
 
 $fileList = `$fileListCmd`;
 
-$fileList = explode("\r\n", $fileList);
+$fileList = explode("\n", $fileList);
 
 var_dump($fileList);
