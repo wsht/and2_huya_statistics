@@ -24,7 +24,7 @@ class TargetDirDefine
 	{
 		$timestamp = intval($timestamp / 1000);
 		$date = date("Y-m-d", $timestamp);
-		$logName = "xxm-2058731947" . $date . ".log";
+		$logName = "xxm-2058731947." . $date . ".log";
 		$logDir = $dir . $logName;
 
 		file_put_contents($logDir, $message, FILE_APPEND);
