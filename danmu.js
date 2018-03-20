@@ -3,7 +3,7 @@
  */
 
 const huya_danmu = require('huya-danmu')
-const roomid = 'live/11823664'//'kaerlol'; //'2058731947'
+const roomid = '2058731947'
 const client = new huya_danmu(roomid)
 const fs = require("fs");
 
