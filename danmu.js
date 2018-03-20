@@ -2,8 +2,20 @@
  * Created by hantong on 18/3/15.
  */
 
+const process = require("process");
+let character = process.argv[2];
+let roomid = process.argv[3];
+
+if(!character || !roomid){
+  console.log(`error character: ${character} or roomid ${roomid}`);
+  return;
+}
+
+
+console.log("start listen "+character + " " + roomid + "\n");
+
 const huya_danmu = require('huya-danmu')
-const roomid = '2058731947'
+// const roomid = '2058731947'
 const client = new huya_danmu(roomid)
 const fs = require("fs");
 
@@ -15,21 +27,22 @@ const gift_log = log_dir + "/gift/"
 const msgLogName = (pre) => {
   let date = new Date();
 
-  return `${pre}${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}.log`
+  let month = (date.getMonth() + 1).toString().padStart(2, 0);
+  let day = (date.getDate()).toString().padStart(2, 0);
+
+  let logName = `${character}-${roomid}.${date.getFullYear()}-${month}-${day}.log`;
+
+  return `${pre}${logName}`;
 }
+
 
 client.on('connect', () => {
   console.log(`已连接huya ${roomid}房间弹幕~ at time ${(new Date()).getTime()}`)
-
 })
 
 
-
 client.on('message', msg => {
-  fs.appendFile(msgLogName(), JSON.stringify(msg) + "\n", (err) => {
-    if (err)
-      console.log(err);
-  });
+
   switch (msg.type){
     case "chat":
       fs.appendFile(msgLogName(message_log), JSON.stringify(msg) + "\n", (err) => {
@@ -52,19 +65,6 @@ client.on('message', msg => {
       break;
   }
 
-  // switch (msg.type) {
-  //   case 'chat':
-  //     console.log(`${msg.id}`);
-  //     console.log(`${msg.from.rid}`);
-  //     console.log(`[${msg.from.name}]:${msg.content}`)
-  //     break
-  //   case 'gift':
-  //     console.log(`[${msg.from.name}]->赠送${msg.count}个${msg.name}`)
-  //     break
-  //   case 'online':
-  //     console.log(`[当前人气]:${msg.count}`)
-  //     break
-  // }
 })
 
 client.on('error', e => {

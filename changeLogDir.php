@@ -27,6 +27,10 @@ class TargetDirDefine
 		$logName = "xxm-2058731947." . $date . ".log";
 		$logDir = $dir . $logName;
 
+		if (is_file($logDir)) {
+			unlink($logDir);
+		}
+
 		file_put_contents($logDir, $message, FILE_APPEND);
 	}
 }
@@ -53,3 +57,10 @@ foreach ($fileList as $file) {
 	echo "copy $filePath finish \n\n";
 	fclose($handle);
 }
+
+$cmd = "ps -aux | grep node | grep -v grep | awk '{print $2}' | xargs kill ";
+
+//var_dump(`$cmd`);
+
+$startNode = "(node " . $targetDir . "danmu.js xxm 2058731947 >> " . TargetDirDefine::ROOT_DIR . "error.log &)";
+var_dump($startNode);
