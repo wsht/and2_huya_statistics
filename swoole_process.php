@@ -13,7 +13,7 @@ class TestSwoole
 {
 	public $mpid        = 0;
 	public $works       = [];
-	public $max_process = 1;
+	public $max_process = 2;
 	public  $new_index   = 0;
 
 	public function __construct()
@@ -83,6 +83,7 @@ class TestSwoole
 			$index = intval($index);
 			$new_pid = $this->createProcess($index);
 			echo "rebootProcess: {$index}={$new_pid} done\n";
+			return;
 		}
 
 		throw new \Exception("reboot process error : no pid");
