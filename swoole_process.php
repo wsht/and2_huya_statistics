@@ -92,6 +92,7 @@ class TestSwoole
 		while (1) {
 			if (count($this->works)) {
 				$ret = swoole_process::wait();
+				var_dump($ret);
 				if ($ret) {
 					$this->rebootProcess($ret);
 				}
