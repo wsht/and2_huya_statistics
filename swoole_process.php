@@ -37,7 +37,7 @@ class TestSwoole
 
 	public function createProcess($index = null)
 	{
-		$process = new swoole_process(function (swoole_process $worker) use ($index) {
+		$process = new swoole_process(function (swoole_process $worker) use (&$index) {
 			if (is_null($index)) {
 				$index = $this->new_index;
 				$this->new_index++;
