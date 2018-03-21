@@ -14,7 +14,7 @@ class TestSwoole
 	public $mpid        = 0;
 	public $works       = [];
 	public $max_process = 2;
-	public $new_index   = 0;
+	public  $new_index   = 0;
 
 	public function __construct()
 	{
@@ -32,17 +32,24 @@ class TestSwoole
 	{
 		for ($i = 0; $i < $this->max_process; $i++) {
 			$this->createProcess();
+			var_dump($this->works);
 		}
 	}
 
 	public function createProcess($index = null)
 	{
-		$process = new swoole_process(function (swoole_process $worker) use (&$index) {
-			if (is_null($index)) {
-				$index = $this->new_index;
-				$this->new_index++;
-			}
+		//应该在父进程中设置index， 如果在子进程中操作了new_index 由于父子进程的空间是相对独立的，所以不能共享
+		if (is_null($index)) {
+			$index = $this->new_index;
+			$this->new_index++;
+		}
 
+		$process = new swoole_process(function (swoole_process $worker) use (&$index) {
+
+//			if (is_null($index)) {
+//				$index = $this->new_index;
+//				$this->new_index++;
+//			}
 			swoole_set_process_name(sprintf("php-ps %s", $index));
 			for ($j = 0; $j < 10; $j++) {
 				$this->checkMpid($worker);
