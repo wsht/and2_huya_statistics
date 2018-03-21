@@ -13,7 +13,7 @@ class TestSwoole
 {
 	public $mpid        = 0;
 	public $works       = [];
-	public $max_process = 2;
+	public $max_process = 1;
 	public  $new_index   = 0;
 
 	public function __construct()
@@ -51,7 +51,7 @@ class TestSwoole
 //				$this->new_index++;
 //			}
 			swoole_set_process_name(sprintf("php-ps %s", $index));
-			for ($j = 0; $j < 10; $j++) {
+			for ($j = 0; $j < 2; $j++) {
 				$this->checkMpid($worker);
 				echo "msg: {$j} \n";
 				sleep(1);
@@ -78,6 +78,7 @@ class TestSwoole
 	{
 		$pid = $ret['pid'];
 		$index = array_search($pid, $this->works);
+		var_dump($index);
 		if($index !== false){
 			$index = intval($index);
 			$new_pid = $this->createProcess($index);
