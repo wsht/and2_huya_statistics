@@ -81,7 +81,7 @@ $capsule->setAsGlobal();
 $messageConfig = new StatisticConfig();
 //这里不应该由外部传入，如果由外部传入，也只是传入规则，不应该具体到某个日志
 $messageConfig->setLogDir("/data/huya_log/v1//message");
-$messageConfig->setRunTimerLogDir(__DIR__ . "/runtime/message");
+$messageConfig->setRunTimerLogDir(__DIR__ . "/runtime_log/message");
 $messageConfig->setName("xxm");
 $messageConfig->setRoomid(2058731947);
 $messageConfig->setDate(date("Y-m-d"));
