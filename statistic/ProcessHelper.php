@@ -28,7 +28,7 @@ class ProcessHelper
 	{
 		$this->processHandler = $handler;
 		$this->waitCallable = $callable;
-		var_dump($this->waitCallable);
+
 		try {
 			swoole_set_process_name(sprintf("statistic-huya-danmu %s", "master"));
 			$this->mpid = posix_getpid();

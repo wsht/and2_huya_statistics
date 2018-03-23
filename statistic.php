@@ -58,6 +58,7 @@ class StatisticProcess
 
 $process = new StatisticProcess();
 if ($process->scriptRunNum() > 1) {
+	echo "process is run exit \n";
 	exit();
 }
 
