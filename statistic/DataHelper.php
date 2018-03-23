@@ -7,6 +7,7 @@
  */
 
 namespace statisticHelper;
+use Illuminate\Database\Capsule\Manager as Capsule;
 trait DataHelper
 {
 	private function getFormatDate($format, $date)
@@ -20,7 +21,7 @@ trait DataHelper
 
 	public function addUser($rid, $name)
 	{
-		$builder = \Capsule::table("danmu_user");
+		$builder = Capsule::table("danmu_user");
 
 		if (!$builder->where(["rid" => $rid])->exists()) {
 			return $builder->insert(['rid' => $rid, 'name' => $name]);
