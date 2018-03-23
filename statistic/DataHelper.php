@@ -20,7 +20,7 @@ trait DataHelper
 
 	public function addUser($rid, $name)
 	{
-		$builder = Capsule::table("danmu_user");
+		$builder = \Capsule::table("danmu_user");
 
 		if (!$builder->where(["rid" => $rid])->exists()) {
 			return $builder->insert(['rid' => $rid, 'name' => $name]);
