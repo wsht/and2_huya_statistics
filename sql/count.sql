@@ -40,3 +40,4 @@ CREATE TABLE danmu_message(
   PRIMARY KEY (`id`)
 );
 
+ALTER table

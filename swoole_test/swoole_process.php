@@ -6,7 +6,7 @@
  * Time: 上午10:15
  */
 
-require "vendor/autoload.php";
+require "../vendor/autoload.php";
 
 
 class TestSwoole
