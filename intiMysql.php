@@ -18,7 +18,7 @@ $capsule->addConnection([
 	'host'      => "127.0.0.1",
 	'database'  => 'huya_danmu',
 	'username'  => 'root',
-	'password'  => '',
+	'password'  => 'root',
 	'charset'   => 'latin1',
 	'collation' => 'latin1_swedish_ci',
 	'prefix'    => '',
