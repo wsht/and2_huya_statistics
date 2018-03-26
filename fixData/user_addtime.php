@@ -36,6 +36,7 @@ function updateUserCtime($rid, $ctime, StatisticMessage $statisticMessage)
 }
 
 foreach ($messageList as $list) {
+	echo "log dir is " . $dir.$list."\n";
 	$handle = fopen($dir . $list, 'r');
 	while ($buf = fgets($handle, 4096)) {
 		$buf = json_decode($buf);
