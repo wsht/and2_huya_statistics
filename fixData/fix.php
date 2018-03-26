@@ -96,6 +96,9 @@ class Fix
 	}
 }
 
-$fix = new Fix();
+//$fix = new Fix();
 
-$fix->run_giftMessage();
+//$fix->run_giftMessage();
+
+
+var_dump(Capsule::table("gift_detail")->where(["name"=>123])->get(["id"])->toArray()[0]->id);

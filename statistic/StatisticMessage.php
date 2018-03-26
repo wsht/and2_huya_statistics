@@ -195,7 +195,7 @@ class StatisticMessage implements StatisticLogHandlerInterface
 		$builder = Capsule::table("gift_detail");
 
 		$attr = ["name" => $buffer->name];
-		if ($builder->exists($attr)) {
+		if ($builder->where($attr)->exists()) {
 
 			return $builder->where($attr)->get(["id"])->toArray()[0]->id;
 		}
