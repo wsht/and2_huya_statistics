@@ -36,12 +36,12 @@ function updateUserCtime($rid, $ctime, StatisticMessage $statisticMessage)
 }
 
 
-//for ($sDate = 15; $sDate <= 20; $sDate++) {
+for ($sDate = 15; $sDate <= 20; $sDate++) {
+
+	$dir = "/root/wsht/and2_huya_statistics/";
+	$list = "message.2018-3-$sDate.log";
 //
-//	$dir = "/root/wsht/and2_huya_statistics/";
-//	$list = "message.2018-3-$sDate.log";
-//
-foreach ($messageList as $list) {
+//foreach ($messageList as $list) {
 	echo "log dir is " . $dir . $list . "\n";
 	$handle = fopen($dir . $list, 'r');
 	while ($buf = fgets($handle, 4096)) {
