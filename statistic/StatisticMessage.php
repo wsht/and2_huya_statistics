@@ -44,7 +44,9 @@ class StatisticMessage implements StatisticLogHandlerInterface
 		}
 		try {
 			Capsule::connection()->transaction(function () use ($buffer) {
-				if($buffer->type == 'online') return true;
+				if ($buffer->type == 'online') {
+					return true;
+				}
 				if (!$this->isMessageExist($buffer->id)) {
 					$type = 1;
 					if ($buffer->type == "gift") {
@@ -55,9 +57,9 @@ class StatisticMessage implements StatisticLogHandlerInterface
 
 						$this->addGiftHourTimer($buffer->from->rid, $buffer->time, $giftId, $buffer->count);
 						$this->addGiftTotalTimer($buffer->from->rid, $giftId, $buffer->count);
-					}elseif($buffer->type == 'chat'){
+					} elseif ($buffer->type == 'chat') {
 						$content = $buffer->content;
-					}else{
+					} else {
 						return true;
 					}
 
@@ -72,6 +74,7 @@ class StatisticMessage implements StatisticLogHandlerInterface
 
 			return true;
 		} catch (\Exception $exception) {
+			var_dump($exception->getMessage());
 			return false;
 		}
 	}
