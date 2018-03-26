@@ -18,6 +18,8 @@ const huya_danmu = require('huya-danmu')
 // const roomid = '2058731947'
 const client = new huya_danmu(roomid)
 const fs = require("fs");
+const md5 = require("md5");
+
 
 const log_dir = '/data/huya_log/v1';
 const message_log  = log_dir + "/message/";
@@ -51,6 +53,7 @@ client.on('message', msg => {
       });
       break;
     case "gift":
+      msg.id = md5(JSON.stringify(msg));
       fs.appendFile(msgLogName(message_log), JSON.stringify(msg) + "\n", (err) => {
         if (err)
           console.log(err);
