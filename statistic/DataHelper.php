@@ -7,10 +7,12 @@
  */
 
 namespace statisticHelper;
+
 use Illuminate\Database\Capsule\Manager as Capsule;
+
 trait DataHelper
 {
-	private function getFormatDate($format, $date)
+	public function getFormatDate($format, $date)
 	{
 		$date = intval($date / 1000);;
 		$date = date($format, $date);
@@ -19,12 +21,14 @@ trait DataHelper
 	}
 
 
-	public function addUser($rid, $name)
+	public function addUser($rid, $name, $date)
 	{
+		$date = $this->getFormatDate("Y-m-d H:i:s", $date);
+
 		$builder = Capsule::table("danmu_user");
 
 		if (!$builder->where(["rid" => $rid])->exists()) {
-			return $builder->insert(['rid' => $rid, 'name' => $name]);
+			return $builder->insert(['rid' => $rid, 'name' => $name, "ctime" => $date]);
 		}
 
 		return true;

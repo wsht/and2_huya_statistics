@@ -60,7 +60,7 @@ class StatisticMessage implements StatisticLogHandlerInterface
 		}
 	}
 
-	public function addMessage($id, $content, $sendTime, $rid)
+	public function addMessage($id, $content, $sendTime, $rid, $type=1)
 	{
 		$sendTime = $this->getFormatDate("Y-m-d H:i:s", $sendTime);
 
@@ -68,7 +68,8 @@ class StatisticMessage implements StatisticLogHandlerInterface
 			"id"       => $id,
 			"content"  => $content,
 			"sendTime" => $sendTime,
-			"rid"      => $rid
+			"rid"      => $rid,
+			'type' => $type
 		]);
 	}
 
