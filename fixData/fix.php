@@ -63,24 +63,24 @@ class Fix
 
 	public function run_giftMessage()
 	{
-		foreach ($this->preLogList as $list) {
-			$dir = $this->preLogDir . $list;
-			echo "$dir is runing \n";
-			$handler = fopen($dir, "r");
-
-			while ($buffer = fgets($handler, 4098)) {
-				$this->intoMessageList($buffer);
-			}
-
-			fclose($handler);
-		}
+//		foreach ($this->preLogList as $list) {
+//			$dir = $this->preLogDir . $list;
+//			echo "$dir is runing \n";
+//			$handler = fopen($dir, "r");
+//
+//			while ($buffer = fgets($handler, 4098)) {
+//				$this->intoMessageList($buffer);
+//			}
+//
+//			fclose($handler);
+//		}
 
 		$dir = $this->newGiftLogDir;
-		foreach ($this->getDirList($dir) as $list){
-			$dir = $dir.$list;
-			echo "$dir is runing \n";
+		foreach ($this->getDirList($dir) as $list) {
 
-			$handler = fopen($dir, "r");
+			echo $dir . $list . " is runing \n";
+
+			$handler = fopen($dir . $list, "r");
 
 			while ($buffer = fgets($handler, 4098)) {
 				$this->intoMessageList($buffer);
