@@ -45,12 +45,24 @@ class StatisticMessage implements StatisticLogHandlerInterface
 		try {
 			Capsule::connection()->transaction(function () use ($buffer) {
 				if (!$this->isMessageExist($buffer->id)) {
-					$this->addMessage($buffer->id, $buffer->content, $buffer->time, $buffer->from->rid);
-					$this->addUser($buffer->from->rid, $buffer->from->name);
-					$this->addTotalTimer($buffer->from->rid);
-					$this->add5MinutesTimer($buffer->from->rid, $buffer->time);
-					$this->addHourTimer($buffer->from->rid, $buffer->time);
-					$this->addDayTimer($buffer->from->rid, $buffer->time);
+					$type = 1;
+					$content = $buffer->content;
+					if ($buffer->type == "gift") {
+						$type = 2;
+						$content = $this->convertLogDataToContent($buffer);
+
+						$giftId = $this->createOrGetGiftID($buffer);
+
+						$this->addGiftHourTimer($buffer->from->rid, $buffer->time, $giftId, $buffer->count);
+						$this->addGiftTotalTimer($buffer->from->rid, $giftId, $buffer->count);
+					}
+
+					$this->addMessage($buffer->id, $content, $buffer->time, $buffer->from->rid, $type);
+					$this->addUser($buffer->from->rid, $buffer->from->name, $buffer->time, $type);
+					$this->addTotalTimer($buffer->from->rid, $type);
+					$this->add5MinutesTimer($buffer->from->rid, $buffer->time, $type);
+					$this->addHourTimer($buffer->from->rid, $buffer->time, $type);
+					$this->addDayTimer($buffer->from->rid, $buffer->time, $type);
 				}
 			});
 
@@ -60,7 +72,7 @@ class StatisticMessage implements StatisticLogHandlerInterface
 		}
 	}
 
-	public function addMessage($id, $content, $sendTime, $rid, $type=1)
+	public function addMessage($id, $content, $sendTime, $rid, $type = 1)
 	{
 		$sendTime = $this->getFormatDate("Y-m-d H:i:s", $sendTime);
 
@@ -69,7 +81,7 @@ class StatisticMessage implements StatisticLogHandlerInterface
 			"content"  => $content,
 			"sendTime" => $sendTime,
 			"rid"      => $rid,
-			'type' => $type
+			'type'     => $type
 		]);
 	}
 
@@ -78,12 +90,14 @@ class StatisticMessage implements StatisticLogHandlerInterface
 		return Capsule::table("danmu_message")->where(["id" => "$id"])->exists();
 	}
 
-	public function addTotalTimer($rid)
+	public function addTotalTimer($rid, $type = 1)
 	{
-		return $this->incrementCountTimer("danmu_count_total", $rid);
+		$attr = array_merge(compact('rid'), compact('type'));
+
+		return $this->incrementCountTimer("danmu_count_total", $attr);
 	}
 
-	public function add5MinutesTimer($rid, $date)
+	public function add5MinutesTimer($rid, $date, $type = 1)
 	{
 		$calDate = (int)( $date / 1000 );
 		$curMinutes = date("i", $calDate);
@@ -91,33 +105,96 @@ class StatisticMessage implements StatisticLogHandlerInterface
 
 		$date = $this->getFormatDate("Y-m-d H", $date) . ":" . str_pad($minutes, 2, "0", STR_PAD_LEFT) . ":00";
 
-		return $this->incrementCountTimer("danmu_count_minutes_5", $rid, $date);
+
+		$attr = array_merge(
+			compact('rid'),
+			compact('date'),
+			compact('type')
+		);
+
+		return $this->incrementCountTimer("danmu_count_minutes_5", $attr);
 	}
 
-	public function addHourTimer($rid, $date)
+	public function addHourTimer($rid, $date, $type = 1)
 	{
 		$date = $this->getFormatDate("Y-m-d H", $date) . ":00:00";
 
-		return $this->incrementCountTimer("danmu_count_hours", $rid, $date);
+		$attr = array_merge(
+			compact('rid'),
+			compact('date'),
+			compact('type')
+		);
+
+		return $this->incrementCountTimer("danmu_count_hours", $attr);
 	}
 
-	public function addDayTimer($rid, $date)
+	public function addDayTimer($rid, $date, $type = 1)
 	{
 		$date = $this->getFormatDate("Y-m-d", $date) . " 00:00:00";
 
-		return $this->incrementCountTimer("danmu_count_day", $rid, $date);
+		$attr = array_merge(
+			compact('rid'),
+			compact('date'),
+			compact('type')
+		);
+
+		return $this->incrementCountTimer("danmu_count_day", $attr);
 	}
 
-	private function incrementCountTimer($table, $rid, $date = null)
+	public function addGiftHourTimer($rid, $date, $giftid, $count = 1)
+	{
+		$date = $this->getFormatDate("Y-m-d H", $date) . ":00:00";
+		$attr = array_merge(compact("rid"), compact('date'), compact('giftid'));
+
+		return $this->incrementCountTimer("gift_count_hours", $attr, $count);
+	}
+
+	public function addGiftTotalTimer($rid, $giftid, $count = 1)
+	{
+		$attr = array_merge(compact("rid"), compact('giftid'));
+
+		return $this->incrementCountTimer("gift_count_total", $attr, $count);
+	}
+
+	private function incrementCountTimer($table, $attr, $count = 1)
 	{
 		$builder = Capsule::table("$table");
 
-		$attr = array_filter(["rid" => $rid, 'date' => $date]);
+		$attr = array_filter($attr);
 
 		if ($builder->where($attr)->exists()) {
-			return $builder->where($attr)->increment("timer");
+			return $builder->where($attr)->increment("timer", $count);
 		}
 
 		return $builder->insert(array_merge($attr, ['timer' => 1]));
+	}
+
+	public function convertLogDataToContent($buffer)
+	{
+		$data = [
+			"name"      => $buffer->name,
+			"count"     => $buffer->count,
+			"price"     => $buffer->price,
+			"earn"      => $buffer->earn,
+			"time"      => $buffer->time,
+			"user_name" => $buffer->from->name
+		];
+
+		return json_encode($data);
+	}
+
+	public function createOrGetGiftID($buffer)
+	{
+		$builder = Capsule::table("gift_detail");
+
+		$attr = ["name" => $buffer->name];
+		if ($builder->exists($attr)) {
+
+			return $builder->where($attr)->get(["id"])->toArray()[0]->id;
+		}
+
+		$data = ['name' => $buffer->name, "price" => $buffer->price / $buffer->count];
+
+		return $builder->insertGetId($data);
 	}
 }
