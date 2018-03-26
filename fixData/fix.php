@@ -98,19 +98,19 @@ class Fix
 			echo "start $s \n";
 			foreach ($this->getFromMessage($s, $e) as $item){
 				$rid = $item[0];
-				var_dump($item);
-				sleep(1);
+//				var_dump($item);
+//				sleep(1);
 				$sendTime = $item[1];
 				$userCtime = $this->getUserCtime($rid);
 
-//				if ($userCtime) {
-//					if (is_null($userCtime[0]->ctime)) {
-//						$this->updateUserCtime($rid, $sendTime);
-//						echo "user {$rid} add in time " . $sendTime . "\n";
-//					}
-//				} else {
-//					echo "user not exist";
-//				}
+				if ($userCtime) {
+					if (is_null($userCtime[0]->ctime)) {
+						$this->updateUserCtime($rid, $sendTime);
+						echo "user {$rid} add in time " . $sendTime . "\n";
+					}
+				} else {
+					echo "user not exist";
+				}
 			}
 		}
 	}
