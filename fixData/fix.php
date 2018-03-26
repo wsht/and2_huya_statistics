@@ -73,30 +73,34 @@ class Fix
 			fclose($handler);
 		}
 
-		$dir = $this->newGiftLogDir;
-		foreach ($this->getDirList($dir) as $list) {
+		$dirList = [$this->newMessageLogDir, $this->newGiftLogDir];
+		foreach ($dirList as $dir) {
+//			$dir = $this->newGiftLogDir;
+			foreach ($this->getDirList($dir) as $list) {
 
-			echo $dir . $list . " is runing \n";
+				echo $dir . $list . " is runing \n";
 
-			$handler = fopen($dir . $list, "r");
+				$handler = fopen($dir . $list, "r");
 
-			while ($buffer = fgets($handler, 4098)) {
-				$this->intoMessageList($buffer);
+				while ($buffer = fgets($handler, 4098)) {
+					$this->intoMessageList($buffer);
+				}
+
+				fclose($handler);
 			}
-
-			fclose($handler);
 		}
 	}
 
-	public function updateUserCreateTime(){
+	public function updateUserCreateTime()
+	{
 		$stime = 15;
-		$curTime  = date("d");
+		$curTime = date("d");
 
-		for ($i=$stime; $i<=$curTime; $i++){
+		for ($i = $stime; $i <= $curTime; $i++) {
 			$s = "2018-03-$i 00:00:00";
 			$e = "2018-03-$i 23:59:59";
 			echo "start $s \n";
-			foreach ($this->getFromMessage($s, $e) as $item){
+			foreach ($this->getFromMessage($s, $e) as $item) {
 				$rid = $item[0];
 //				var_dump($item);
 //				sleep(1);
@@ -115,11 +119,12 @@ class Fix
 		}
 	}
 
-	public function getFromMessage($s,$e){
+	public function getFromMessage($s, $e)
+	{
 		$result = Capsule::table("danmu_message")->whereBetween("sendTime", [$s, $e])->orderBy("sendTime")->get();
 
 		$result = $result->toArray();
-		foreach ($result as $res){
+		foreach ($result as $res) {
 			yield [$res->rid, $res->sendTime];
 		}
 	}
@@ -131,8 +136,8 @@ class Fix
 }
 
 $fix = new Fix();
-
-$fix->updateUserCreateTime();
+$fix->run_giftMessage();
+//$fix->updateUserCreateTime();
 
 
 
