@@ -71,7 +71,7 @@ class StatisticMessage implements StatisticLogHandlerInterface
 					$this->addDayTimer($buffer->from->rid, $buffer->time, $type);
 				}
 			});
-
+			echo "message:".json_encode($buffer)." handler finish\n";
 			return true;
 		} catch (\Exception $exception) {
 			echo $exception->getMessage()."\n";
