@@ -10,6 +10,7 @@
 require __DIR__ . "/vendor/autoload.php";
 require __DIR__."/intiMysql.php";
 
+date_default_timezone_set("Asia/Shanghai");
 
 use statisticHelper\StatisticConfig;
 use statisticHelper\StatisticMessage;
