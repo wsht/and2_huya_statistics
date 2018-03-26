@@ -136,8 +136,8 @@ class Fix
 }
 
 $fix = new Fix();
-$fix->run_giftMessage();
-//$fix->updateUserCreateTime();
+//$fix->run_giftMessage();
+$fix->updateUserCreateTime();
 
 
 
