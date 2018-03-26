@@ -46,7 +46,6 @@ class StatisticMessage implements StatisticLogHandlerInterface
 			Capsule::connection()->transaction(function () use ($buffer) {
 				if (!$this->isMessageExist($buffer->id)) {
 					$type = 1;
-					$content = $buffer->content;
 					if ($buffer->type == "gift") {
 						$type = 2;
 						$content = $this->convertLogDataToContent($buffer);
@@ -55,6 +54,10 @@ class StatisticMessage implements StatisticLogHandlerInterface
 
 						$this->addGiftHourTimer($buffer->from->rid, $buffer->time, $giftId, $buffer->count);
 						$this->addGiftTotalTimer($buffer->from->rid, $giftId, $buffer->count);
+					}elseif($buffer->type == 'chat'){
+						$content = $buffer->content;
+					}else{
+						return true;
 					}
 
 					$this->addMessage($buffer->id, $content, $buffer->time, $buffer->from->rid, $type);
