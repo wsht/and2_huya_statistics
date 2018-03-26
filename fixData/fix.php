@@ -113,7 +113,7 @@ class Fix
 	}
 
 	public function getFromMessage($s,$e){
-		$result = Capsule::table("danmu_message")->whereBetween("sendTime", [$s, $e])->orderBy("ctime")->get();
+		$result = Capsule::table("danmu_message")->whereBetween("sendTime", [$s, $e])->orderBy("sendTime")->get();
 
 		$result = $result->toArray();
 		foreach ($result as $res){
