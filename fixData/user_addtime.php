@@ -19,7 +19,7 @@ $statisticMessage = new StatisticMessage(new \statisticHelper\StatisticConfig())
 
 $dir = "/data/huya_log/v1/message/";
 //修理message ctime
-//$messageList = array_diff(scandir($dir), [".", ".."]);
+$messageList = array_diff(scandir($dir), [".", ".."]);
 
 
 function getUserCtime($rid)
