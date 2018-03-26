@@ -43,9 +43,11 @@ foreach ($messageList as $list) {
 		if($userCtime){
 			if(is_null($userCtime[0]->ctime)){
 				updateUserCtime($buf->from->rid, $buf->time, $statisticMessage);
+				echo "user {$buf->from->rid} add in time ".$statisticMessage->getFormatDate("Y-m-d H:i:s", $buf->time)."\n";
 			}
 		}else{
-			$statisticMessage->addUser($buf->from->rid, $buf->from->name);
+			$statisticMessage->addUser($buf->from->rid, $buf->from->name, $buf->time);
+			echo "create user {$buf->from->rid} add in time ".$statisticMessage->getFormatDate("Y-m-d H:i:s", $buf->time)."\n";
 		}
 	}
 }
