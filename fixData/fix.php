@@ -67,7 +67,13 @@ class Fix
 			$handler = fopen($dir, "r");
 
 			while ($buffer = fgets($handler, 4098)) {
-				$this->intoMessageList($buffer);
+
+				$buffer_copy = json_decode($buffer);
+				if($buffer_copy->type == "gift"){
+					$buffer_copy->id = md5($buffer);
+					$buffer_copy = json_encode($buffer_copy);
+					$this->intoMessageList($buffer_copy);
+				}
 			}
 
 			fclose($handler);
@@ -83,7 +89,12 @@ class Fix
 				$handler = fopen($dir . $list, "r");
 
 				while ($buffer = fgets($handler, 4098)) {
-					$this->intoMessageList($buffer);
+					$buffer_copy = json_decode($buffer);
+					if($buffer_copy->type == "gift"){
+						$buffer_copy->id = md5($buffer);
+						$buffer_copy = json_encode($buffer_copy);
+						$this->intoMessageList($buffer_copy);
+					}
 				}
 
 				fclose($handler);
@@ -136,8 +147,8 @@ class Fix
 }
 
 $fix = new Fix();
-//$fix->run_giftMessage();
-$fix->updateUserCreateTime();
+$fix->run_giftMessage();
+//$fix->updateUserCreateTime();
 
 
 
