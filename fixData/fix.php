@@ -49,8 +49,6 @@ class Fix
 
 	public function updateUserCtime($rid, $ctime)
 	{
-		$ctime = $this->messageHelper->getFormatDate("Y-m-d H:i:s", $ctime);
-
 		return Capsule::table("danmu_user")->where("rid", $rid)->update(compact('ctime'));
 	}
 
@@ -90,6 +88,39 @@ class Fix
 		}
 	}
 
+	public function updateUserCreateTime(){
+		$stime = 15;
+		$curTime  = date("d");
+
+		for ($i=$stime; $i<=$curTime; $i++){
+			$s = "2018-03-$i 00:00:00";
+			$e = "2018-03-$i 23:59:59";
+			echo "start $s \n";
+			foreach ($this->getFromMessage($s, $e) as $item){
+				$rid = $item[0];
+				$sendTime = $item[1];
+				$userCtime = $this->getUserCtime();
+				if ($userCtime) {
+					if (is_null($userCtime[0]->ctime)) {
+						$this->updateUserCtime($rid, $sendTime);
+						echo "user {$rid} add in time " . $sendTime . "\n";
+					}
+				} else {
+					echo "user not exist";
+				}
+			}
+		}
+	}
+
+	public function getFromMessage($s,$e){
+		$result = Capsule::table("danmu_message")->whereBetween("sendTime", [$s, $e])->orderBy("ctime")->get();
+
+		$result = $result->toArray();
+		foreach ($result as $res){
+			yield [$res->rid, $res->sendTime];
+		}
+	}
+
 	public function getDirList($dir)
 	{
 		return array_diff(scandir($dir), [".", ".."]);
@@ -98,7 +129,7 @@ class Fix
 
 $fix = new Fix();
 
-$fix->run_giftMessage();
+$fix->updateUserCreateTime();
 
 
 
