@@ -44,6 +44,7 @@ class StatisticMessage implements StatisticLogHandlerInterface
 		}
 		try {
 			Capsule::connection()->transaction(function () use ($buffer) {
+				if($buffer->type == 'online') return true;
 				if (!$this->isMessageExist($buffer->id)) {
 					$type = 1;
 					if ($buffer->type == "gift") {
