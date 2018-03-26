@@ -51,7 +51,7 @@ client.on('message', msg => {
       });
       break;
     case "gift":
-      fs.appendFile(msgLogName(gift_log), JSON.stringify(msg) + "\n", (err) => {
+      fs.appendFile(msgLogName(message_log), JSON.stringify(msg) + "\n", (err) => {
         if (err)
           console.log(err);
       });

@@ -74,7 +74,7 @@ class StatisticMessage implements StatisticLogHandlerInterface
 
 			return true;
 		} catch (\Exception $exception) {
-			var_dump($exception->getMessage());
+			echo $exception->getMessage()."\n";
 			return false;
 		}
 	}

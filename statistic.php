@@ -8,11 +8,13 @@
 
 
 require __DIR__ . "/vendor/autoload.php";
+require __DIR__."/intiMysql.php";
+
 
 use statisticHelper\StatisticConfig;
 use statisticHelper\StatisticMessage;
 use statisticHelper\ProcessHelper;
-use Illuminate\Database\Capsule\Manager as Capsule;
+//use Illuminate\Database\Capsule\Manager as Capsule;
 
 class StatisticProcess
 {
@@ -61,22 +63,6 @@ if ($process->scriptRunNum() > 1) {
 	echo "process is run exit \n";
 	exit();
 }
-
-//set global Capusle
-$capsule = new Capsule;
-$capsule->addConnection([
-	'driver'    => 'mysql',
-	'host'      => "127.0.0.1",
-	'database'  => 'huya_danmu',
-	'username'  => 'root',
-	'password'  => 'root',
-	'charset'   => 'latin1',
-	'collation' => 'latin1_swedish_ci',
-	'prefix'    => '',
-]);
-
-
-$capsule->setAsGlobal();
 
 
 $messageConfig = new StatisticConfig();
