@@ -59,6 +59,8 @@ for ($sDate = 15; $sDate <= 20; $sDate++) {
 			}
 		}
 	}
+	fclose($handle);
 //}
-
 }
+
+
