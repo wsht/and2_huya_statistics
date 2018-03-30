@@ -19,6 +19,8 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 $statisticMessage = new StatisticMessage(new \statisticHelper\StatisticConfig());
 
 
+//TODO fix gift id end in 1522056590576
+
 class Fix
 {
 	private $preLogDir = "/root/wsht/and2_huya_statistics/";
