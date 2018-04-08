@@ -79,6 +79,7 @@ client.on('error', e => {
 client.on('close', () => {
   console.log("close at time" + (new Date()).getTime() + "\n");
   console.log("\n");
+  client.start()
 })
 
 client.start()
