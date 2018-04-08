@@ -11,6 +11,6 @@ if($runNum >= 1){
     exit(0);
 }
 
-$cmd = '(node danmu.js xxm 2058731947 >> /data/huya_log/v1/error.log &)';
+$cmd = '(node /root/wsht/and2_huya_statistics/danmu.js xxm 2058731947 >> /data/huya_log/v1/error.log &)';
 
 echo `$cmd`;
