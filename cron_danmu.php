@@ -1,6 +1,6 @@
 <?php
 
-$cmd = 'ps -aux | grep "node danmu.js xxm 2058731947" | grep -v grep | awk "{print NR}" | tail -n 1 ';
+$cmd = 'ps -aux | grep "node /root/wsht/and2_huya_statistics/danmu.js xxm 2058731947" | grep -v grep | awk "{print NR}" | tail -n 1 ';
 
 
 $runNum = intval(`$cmd`);
