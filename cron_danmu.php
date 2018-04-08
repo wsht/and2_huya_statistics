@@ -4,7 +4,7 @@ $cmd = 'ps -aux | grep "node /root/wsht/and2_huya_statistics/danmu.js xxm 205873
 
 
 $runNum = intval(`$cmd`);
-
+echo "current run num is $runNum\n";
 
 if($runNum >= 1){
     echo "runnum is:".$runNum."\n";
