@@ -1,6 +1,8 @@
 <?php
 
-$cmd = 'ps -aux | grep "node /root/wsht/and2_huya_statistics/danmu.js xxm 2058731947" | grep -v grep | awk "{print NR}" | tail -n 1 ';
+$roomid = "13775209";
+
+$cmd = 'ps -aux | grep "node /root/wsht/and2_huya_statistics/danmu.js xxm '.$roomid.'" | grep -v grep | awk "{print NR}" | tail -n 1 ';
 
 
 $runNum = intval(`$cmd`);
@@ -11,7 +13,7 @@ if($runNum >= 1){
     exit(0);
 }else
 {
-    $cmd = '(node /root/wsht/and2_huya_statistics/danmu.js xxm 2058731947 >> /data/huya_log/v1/error.log &)';
+    $cmd = '(node /root/wsht/and2_huya_statistics/danmu.js xxm '.$roomid.' >> /data/huya_log/v1/error.log &)';
 
     echo `$cmd`;
 }

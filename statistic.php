@@ -71,7 +71,7 @@ $messageConfig = new StatisticConfig();
 $messageConfig->setLogDir("/data/huya_log/v1//message");
 $messageConfig->setRunTimerLogDir(__DIR__ . "/runtime_log/message");
 $messageConfig->setName("xxm");
-$messageConfig->setRoomid(2058731947);
+$messageConfig->setRoomid(13775209);// //2058731947
 $messageConfig->setDate(date("Y-m-d"));
 
 $statistic = new StatisticMessage($messageConfig);
